@@ -24,6 +24,18 @@ steps:
     npm run test
   displayName: 'Unit Test'
 
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml'
+    pathToSources: '$(Build.SourcesDirectory)/src'
+    reportDirectory: '$(Build.SourcesDirectory)/coverage'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/TEST-*.xml'
+
 - task: Docker@2
   inputs:
     containerRegistry: 'ACR Cshion'
