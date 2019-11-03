@@ -16,10 +16,13 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install -g @angular/cli
-    npm install
-    ng build --prod
-  displayName: 'npm install and build'
+    npm ci
+    npm run build:prod
+  displayName: 'Build'
+
+- script: |
+    npm run test
+  displayName: 'Unit Test'
 
 - task: Docker@2
   inputs:
@@ -27,3 +30,6 @@ steps:
     repository: 'spring-petclinic-angular'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
+  displayName: 'Build Docker Container'
+
+
