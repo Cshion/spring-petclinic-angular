@@ -28,13 +28,11 @@ steps:
   inputs:
     codeCoverageTool: 'Cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml'
-    pathToSources: '$(Build.SourcesDirectory)/src'
-    reportDirectory: '$(Build.SourcesDirectory)/coverage'
 
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'
-    testResultsFiles: '**/TEST-*.xml'
+    testResultsFiles: 'TEST-*.xml'
 
 - task: Docker@2
   inputs:
