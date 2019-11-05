@@ -13,7 +13,7 @@ steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
-  displayName: 'Install Node.js'
+  displayName: 'Preparation'
 
 - script: |
     npm ci
@@ -24,6 +24,10 @@ steps:
     npm run test
   displayName: 'Unit Test'
 
+- script: |
+    npm run lint
+  displayName: 'Static Analysis'
+
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: 'Cobertura'
@@ -33,6 +37,12 @@ steps:
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: 'TESTS-*.xml'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
+    ArtifactName: 'app'
+    publishLocation: 'Container'
 
 - task: Docker@2
   inputs:
