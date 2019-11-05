@@ -13,7 +13,7 @@ steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '10.x'
-  displayName: 'Install Node.js'
+  displayName: 'Preparation'
 
 - script: |
     npm ci
@@ -23,6 +23,29 @@ steps:
 - script: |
     npm run test
   displayName: 'Unit Test'
+
+- script: |
+    npm run lint
+  displayName: 'Static Analysis'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/coverage/cobertura-coverage.xml'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'TESTS-*.xml'
+
+- script: |
+    ls -la
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.SourcesDirectory)/dist'
+    ArtifactName: 'app'
+    publishLocation: 'Container'
 
 - task: Docker@2
   inputs:
