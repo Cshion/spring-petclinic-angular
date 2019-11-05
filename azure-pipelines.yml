@@ -21,12 +21,16 @@ steps:
   displayName: 'Build'
 
 - script: |
-    npm run test
-  displayName: 'Unit Test'
+    npm run test -- --karma-config karma.ci.conf.js
+  displayName: 'Unit Tests & IT Tests'
 
 - script: |
     npm run lint
   displayName: 'Static Analysis'
+
+- script: |
+    npm run e2e -- --protractor-config protractor.ci.conf.js
+  displayName: "E2E Tests"
 
 - task: PublishCodeCoverageResults@1
   inputs:
@@ -37,9 +41,15 @@ steps:
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: 'TESTS-*.xml'
+    testRunTitle: 'Unit Tests'
 
-- script: |
-    ls -la
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'junit*.xml'
+    searchFolder: '$(System.DefaultWorkingDirectory)/junit'
+    failTaskOnFailedTests: true
+    testRunTitle: 'E2e Tests'
 
 - task: PublishBuildArtifacts@1
   inputs:
