@@ -38,9 +38,12 @@ steps:
     testResultsFormat: 'JUnit'
     testResultsFiles: 'TESTS-*.xml'
 
+- script: |
+    ls -la
+
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
+    PathtoPublish: '$(Build.SourcesDirectory)/dist'
     ArtifactName: 'app'
     publishLocation: 'Container'
 
